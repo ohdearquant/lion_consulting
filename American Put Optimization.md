@@ -1,8 +1,9 @@
 
-![[am_put_option_price.png]]
+<img width="700" alt="am_put_option_price" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/81b6d406-95a7-497e-8861-4f90009db854">
 
 
-![[am_put_spot_path.png]]
+<img width="700" alt="am_put_spot_path" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/0476a985-0560-4a69-80bf-9cb646b00880">
+
 
 
 
@@ -15,9 +16,18 @@ Different methods are needed for pricing different derivatives depending on thei
 - $P_{i}^{E}~:$ as the probability of the option exercise decision being made on time step $i$
 - $P_{i}~:$ as the probability that the option is exercised on time step $i$
 
-An American option’s exercise value is the difference between strike and spot price or zero, the same as European option when $t=T$.  $$E_t = \max\{0, K-S_{t} \}$$The American-style [[Option Foundations|option’s]] value is the higher of its continuation value and exercise value $$V_{t}= \max \{E_{t,}~ C_{t}\}$$
-An American put option can be thought of a series of events. Each event represents the option being exercised on a particular time step. The expected value of the set of these events, is the option’s value. By the law of total expectation, the option’s value is the sum of expected payoff for each time step. where, the expected exercise value of an option at time step $i$, is the option’s exercise value at $i$ multiplied by its probability of the option can be exercised, which is when the option’s exercise value exceeds its continuation value, or the spot price is below the exercise boundary. $$V(\cdot ) = \sum\limits^{T}_{i=2}\mathbb E[{\max(K-S_{i},~0)
-|P_{i}}]~P_{i}~ P_{i}^{E}$$
+An American option’s exercise value is the difference between strike and spot price or zero, the same as European option when $t=T$.  
+$$E_t = \max\{0, K-S_{t} \}$$
+
+The American-style [[Option Foundations|option’s]] value is the higher of its continuation value and exercise value 
+$$V_{t}= \max \{E_{t,}~ C_{t}\}$$
+
+An American put option can be thought of a series of events. Each event represents the option being exercised on a particular time step. The expected value of the set of these events, is the option’s value. By the law of total expectation, the option’s value is the sum of expected payoff for each time step. where, the expected exercise value of an option at time step $i$, is the option’s exercise value at $i$ multiplied by its probability of the option can be exercised, which is when the option’s exercise value exceeds its continuation value, or the spot price is below the exercise boundary. 
+
+$$V(\cdot) = \sum\limits^{T}_{i=2} \mathbb E [max(K-S_i, 0) | P_i] P_i P_i^E$$
+
+
+
 Therefore, if the continuation value of an American option is known, one can compare it with the option’s exercise value to get the option’s price. However, the continuation value is more challenging to get. If the price of the option depends on just one variable, the lattice models can be used. In his work on option valuation with swarm particle optimization, Dr. Chen introduced the general methods of derivative valuations. The lattice models, such as the binomial tree, or finite difference are efficient, in terms of the balance between speed and accuracy, in solving univariate continuation value problems. Also, since lattice models require discrete time, they can value options that don’t just depend on the final state. However, if the derivative’s value depend on more than one variable, the lattice models become infeasible. In order to solve multivariate continuation value problem, the Monte Carlo method can be modified using these two popular approaches. (Chen)
 
 The first, proposed by Longstaff and Schwartz (2001), being approximating the continuation value of options via a regression function of an arbitrary form. There is one problem with this approach: the exact functional form of the regression needs to be provided as an input. Since the function itself is uncertain, the continuation value cannot be exact. The other approach is to treat derivative pricing as a free-boundary partial differential equation problem. Similarly, if the boundary can be estimated accurately, the price of an American-style derivative can be calculated, just as a barrier option. The second approach is more computationally efficient, but its accuracy depends on the estimation of boundary.
@@ -27,18 +37,41 @@ The first, proposed by Longstaff and Schwartz (2001), being approximating the co
 
 ### Longstaff and Schwartz Model - Least-Squares Quadratic Regression
 
-The Least-Squares Monet Carlo method proposed by Longstaff and Schwartz (2001) emphasizes on conditional expectation function. At each time step, one compares the option’s exercise value with its expected continuation value; if the payoff for immediate exercise is higher than that of holding such options, early exercise should be made; otherwise, the options should remain open. The expected continuation value for each time step is conditioned on prior information. With the least-squares method, one can estimate this conditional expectation from the simulated cross-sectional information, allowing Monte Carlo method to be applied to path-dependent and multivariate options. Such conditional expectation function can be found via regressing the realized continuation payoffs on the basis function for each underlying asset, with the calculated fitted values as the expected continuation values. Then, the optimal strategy for each simulated path can be obtained; option’s value for each path, is then obtained by discounting the optimal payoff to time zero. The option’s value is, $$V_{t}=\max (E_{t}, C_{t})$$$$E_{t}=\max(0,K-S_{t})$$and the continuation value is understood as the risk-neutral expected value $\mathbb E^{Q}_{t}[\cdot]$, also a function of the current spot price, with $f(S_t)$ being an arbitrary function. 
-$$C_{t}= \mathbb E ^{Q}_{t}[E_{t+1}]=f(S_t)$$
+The Least-Squares Monet Carlo method proposed by Longstaff and Schwartz (2001) emphasizes on conditional expectation function. At each time step, one compares the option’s exercise value with its expected continuation value; if the payoff for immediate exercise is higher than that of holding such options, early exercise should be made; otherwise, the options should remain open. The expected continuation value for each time step is conditioned on prior information. With the least-squares method, one can estimate this conditional expectation from the simulated cross-sectional information, allowing Monte Carlo method to be applied to path-dependent and multivariate options. Such conditional expectation function can be found via regressing the realized continuation payoffs on the basis function for each underlying asset, with the calculated fitted values as the expected continuation values. Then, the optimal strategy for each simulated path can be obtained; option’s value for each path, is then obtained by discounting the optimal payoff to time zero. The option’s value is, 
+
+$$V_{t}=\max (E_{t}, C_{t})$$
+
+$$E_{t}=\max(0,K-S_{t})$$
+
+and the continuation value is understood as the risk-neutral expected value $\mathbb E^{Q}_{t}[\cdot]$, also a function of the current spot price, with $f(S_t)$ being an arbitrary function. 
+
+$$C_t= \mathbb E ^Q_t[E_{t+1}]=f(S_t)$$
+
 Using a simple quadratic regression, 
-$$f(S_{t})=a_{0}+a_{1}S_{t}+a_{2}S^{2}_{t}$$
-$$V_{t+1}=a_{0}+a_{1}S_{t}+a_{2}S^{2}_{t}+e_{t+1}$$
+
+$$f(S_{t})=a_{0}+a_1 S_t +a_2 S^2_t$$
+
+$$V_{t+1}=a_{0}+a_{1}S_{t}+a_{2}S^2_t +  e_{t+1}$$
+
 with a boundary condition of option price at expiration is its exercise value, 
+
 $$V_{T}=E_{T}=\max(K-S_{T},0) $$
 
 ### Explicit Boundary method
 
-Pricing American style option is a type of free boundary problem, which, according to Wikipedia, is a [[Black-Scholes Partial Differential Equation|partial differential equation]], involved with an unknown function $u$, and an unknown domain $\Omega$. Here, we are interested in the unknown exercise boundary function, where the option’s exercise value is equal to its continuation value for a given time step; if the exercise boundary can be accurately estimated, the price of option is just an integration over the boundary. However, the unknown exercise boundary function is difficult to approximate because it requires a backward recursive dependent structure, meaning that the boundary value of current time step is dependent on that of the immediate next time step. Intuitively, the option’s price at time $t$ is the expected discounted maximum exercise value any time before expiration, the stopping time $\tau$ is when the option gets exercised,$$V_{t}(\cdot) = \mathbb E ^{Q}_{t}[e^{-r\tau}\max(0, K-S_{t})]$$
-Since exercise should happen if the exercise value exceeds continuation value, meaning that at the boundary, the spot price and boundary price should be the same, the exercise value is strike over spot price at time of exercise $\tau$, $$E_{t}=K - S(\tau)=K-B(\tau)$$Expand on the expectation on the option’s value formula, we get   $$V (t)= \frac{1}{N}\sum\limits_{j=1}^{N}e^{-r\tau_{j}}\max\{K-B(\tau_{j}), 0\}$$The common types of function that the boundary function can take include, constant, linear, exponential, exponential constant, polynomial and carr et al. 
+Pricing American style option is a type of free boundary problem, which, according to Wikipedia, is a [[Black-Scholes Partial Differential Equation|partial differential equation]], involved with an unknown function $u$, and an unknown domain $\Omega$. Here, we are interested in the unknown exercise boundary function, where the option’s exercise value is equal to its continuation value for a given time step; if the exercise boundary can be accurately estimated, the price of option is just an integration over the boundary. However, the unknown exercise boundary function is difficult to approximate because it requires a backward recursive dependent structure, meaning that the boundary value of current time step is dependent on that of the immediate next time step. Intuitively, the option’s price at time $t$ is the expected discounted maximum exercise value any time before expiration, the stopping time $\tau$ is when the option gets exercised,
+
+$$V_t(\cdot) = \mathbb E ^Q_t[e^{-r\tau}\max(0, K-S_t)]$$
+
+Since exercise should happen if the exercise value exceeds continuation value, meaning that at the boundary, the spot price and boundary price should be the same, the exercise value is strike over spot price at time of exercise $\tau$, 
+
+$$E_{t}=K - S(\tau)=K-B(\tau)$$
+
+Expand on the expectation on the option’s value formula, we get   
+
+$$V (t)= \frac{1}{N}\sum\limits_{j=1}^{N}e^{-r\tau_{j}}\max\{K-B(\tau_{j}), 0\}$$
+
+The common types of function that the boundary function can take include, constant, linear, exponential, exponential constant, polynomial and carr et al. 
 
 
 ## Exercise Boundary Optimization
@@ -49,7 +82,9 @@ The problem was formulated as a parabolic partial differential inequality proble
   
 For the American Option pricing problem, there is a matrix $V$, the result of discretizing both the $S$ (stock price) and $\tau$ (time), i.e. $V_{i,j}$ is the option price $S(i)$ with time value $t(j)$. The second derivative w.r.t stock price is then represented using a finite-difference method, typically Crank-Nicholson (for stability). This derivative is $Aw$ in the LCP where $A$ comes from the finite-difference stencil and $w$ and $b$ from the discretization of the differential equation, i.e;  
 $$\large w_{i,v+1} - \frac{\lambda}{2}\left(w_{i+1,v+1} - 2w_{i,v} + w_{i-1,v+1}\right) - w_{i,v} - \frac{\lambda}{2}\left(w_{i+1,v} - 2w_{i,v} + w_{i-1,w}\right)  b_i$$
+
 $$\large  = w_i + \lambda \left(w_{i+1,v} - 2*w_{i,v} + w_{i-1,v}\right)$$
+
 where $\large \lambda=\frac{\delta_t}{2\delta_x^2}$, 
 
 An iterative method to solve this linear system of equations is successive over-relaxation (SOR). $b = Aw$, described (4.6.5; Seydel and Seydel 2006) First the problem is discretized as above. There is a loop where the values of $b$ are updated over the discretized time $v$ -- the $\tau$ loop. Then the LCP solution is found for $w$ via SOR. Where $A$ is decomposed into the $D,L$ and $U$, the Diagonal, Upper and Lower triagnular matrices. The system can then be rewritten as, 
@@ -153,11 +188,14 @@ We consider the following cases, for each IV = 0.05, 0.1, 0.15, compare the opti
 
 For IV = 0.05, we find that the free-boundary method is very similar to the results of the built-in methods from standard MATLAB toolboxes, and the prices as well as standard deviation are within expectation. With the interest rate going up, the American put option price is lower, and the standard deviation among different methods gets bigger. For the methods from the other package we found, the results are more interesting. The Early Exercise Boundary Approach produces output that are less consistent. 
 
+<img width="972" alt="am_put_bounds1" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/766e7d93-196c-45ae-943e-536b89eb7c64">
 
-![[am_put_bounds2.png]]
+<img width="972" alt="am_put_bounds2" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/9d55692f-7e5b-4e32-a0f4-0585cb9fc949">
 
-![[am_put_bounds1.png]]
-![[am_put_bounds_3.png]]
+<img width="972" alt="am_put_bounds_3" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/b8f95b15-6f62-4c3d-a13a-141eb59071ea">
+
+
+
 
 
 As expected, as IV goes up, the option’s price also goes up, which is the case for all methods we are testing. However, the increase of option prices w.r.t increasing IV, is more obvious for interest rate that’s lower. As interest rate goes up, the price goes down, and the standard deviation goes up. 
