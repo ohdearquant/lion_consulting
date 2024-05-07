@@ -1,4 +1,5 @@
-![[DALL·E 2024-05-07 11.46.56 - A close-up image of a majestic lion with a detailed, flowing golden mane. The lion's gaze is intense, capturing the essence of its poise. Sunlight cas.webp]]
+
+<img width="1000" alt="Lion banner" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/55580ee6-e005-4929-8bb4-3386d0ea8f30">
 
 **Introduction to Haiyang Li (Ocean)**
 
@@ -10,7 +11,9 @@ I use my extensive understanding of AI to transform complex challenges into stra
 
 LionAGI, or **Language InterOperable Network - Automated General Intelligence**, is a cutting-edge framework I created to enhance decision-making and operational efficiency by integrating advanced machine learning models into existing workflows and data infrastructures. By treating Large Language Models (LLMs) as **intelligent agents**, LionAGI offers clear, manageable, and optimized workflow steps, addressing common challenges like the interpretability issues and hallucinatory outputs of LLMs.
 
-![ReAct flow.jpg](https://publish-01.obsidian.md/access/e51017f59734583301b583f3781bbd0b/attachments/images/ReAct%20flow.jpg)
+
+<img width="500" alt="ReAct flow" src="https://github.com/ohdearquant/lion_consulting/assets/122793010/0060c80c-21b8-4c10-be93-4ef48346737c">
+
 
 
 **Why Automate Workflows with LionAGI?**
