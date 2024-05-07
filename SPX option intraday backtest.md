@@ -1,6 +1,8 @@
 # SPX Index Option Backtester
 
-Set up a framework for backtesting [[Option Foundations|options]], here is a plot of a sample strategy. 
+![spx_backtest](https://github.com/ohdearquant/lion_consulting/assets/122793010/850e6a3d-1b4a-487c-a3f8-c9cd3617fcb7)
+
+Set up a framework for backtesting here is a plot of a sample strategy. 
 
 ## Sample Strategy
 
